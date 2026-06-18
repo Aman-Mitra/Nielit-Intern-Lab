@@ -1,0 +1,42 @@
+module jk_flipflop_tb();
+	reg clk,rst;
+	reg j,k;
+	wire q;
+	
+	jk_flipflop JK1(clk,rst,j,k,q);
+	
+	always #5 clk=~clk;
+	
+	initial begin
+		{clk,rst,j,k}=0;
+	end
+	
+	initial begin
+		$dumpfile("dump_jk_flipflop.vcd");
+		$dumpvars();
+	
+	end
+	
+	always @(posedge clk)
+    	$display($time," j=%b k=%b q=%b",j,k,q);
+	
+	initial begin
+		//$monitor($time,"j = %b,k = %b,q = %b"j,k,q);
+		
+		rst=1;
+		#10
+		rst=0;{j,k}=2'b00;
+		#10
+		rst=0;{j,k}=2'b11;
+		#10
+		{j,k}=2'b00;
+		#10
+		{j,k}=2'b10;
+		#10
+		{j,k}=2'b01;
+		#20
+		$finish();	
+	
+	end
+	
+endmodule
